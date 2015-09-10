@@ -1,0 +1,60 @@
+{% extends "layout.twig" %}
+
+{% block head_styles %}
+{{ parent() }}
+<style>
+header { text-align: center; margin-top: 1em; }
+</style>
+{% endblock %}
+{% block title %}Парсер для сайта kinopoisk.ru{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <header class="col-xs-12">
+	        <img src="https://pp.vk.me/c625727/v625727873/47f9e/jTpU93qw1WA.jpg" alt="Котёночек">
+        </header>
+    </div>
+<div class="row">
+    <div class="col-xs-12">
+        <h1>KinopoiskParser</h1>
+        <h2>Как работает приложение?</h2>
+        <ol>
+        <li>Найдите фильм на сайте <a href="http://kinopoisk.ru" rel="nofollow">kinopoisk.ru</a>;</li>
+        <li>Найдите его <abbr title="Идентификатор">ID</abbr>
+        (<code>http://www.kinopoisk.ru/film/<strong title="Искомый ID">71065</strong>/</code> это число в конце адресной строки браузера);</li>
+        <li>Вставьте ID в форму.</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+    	<h2>Форма</h2>
+        <form action="/movie/" method="GET" class="application-run">
+        <div class="form-group">
+        	<label for="movie_id">ID фильма</label>
+        	<input class="form-control" type="text" placeholder="71065" name="movie_id" id="movie_id" value="71065">
+        </div>
+        <button type="submit" class="btn btn-default">Показать</button>
+        </form>
+    </div>
+</div>
+
+</div>
+{% endblock %}
+
+{% block bottom_scripts %}
+{{ parent() }}
+<script>
+(function ($) {
+    "use strict";
+
+    $(document).ready(function () {
+        $(".application-run").submit(function (event) {
+            this.action += this.movie_id.value;
+            this.movie_id.remove();
+        });
+    });
+})(jQuery);
+</script>
+{% endblock %}

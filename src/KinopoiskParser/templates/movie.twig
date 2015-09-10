@@ -1,0 +1,30 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <header class="col-xs-12">
+<h1>Информация о фильме</h1>
+<h2>«{{ data.header }}»</h2>
+
+<h3>Информация</h3>
+{% if data.info|length > 0 %}
+<table class="table table-striped table-condensed">
+{% for key, value in data.info %}
+<tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<h3>Актёры</h3>
+{% if data.info|length > 0 %}
+<table class="table table-striped table-condensed">
+{% for field in data.actors %}
+<tr><td><img src="http://www.kinopoisk.ru{{ field.photo }}" alt="Фотография актёра"></td><td>{{ field.name }}</td><td>{{ field.role }}</td></tr>
+{% endfor %}
+</table>
+{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
