@@ -8,15 +8,19 @@ $app = new Silex\Application();
 
 $app['debug'] = true;
 
+$app->register(new Silex\Provider\TwigServiceProvider(), [
+    'twig.path' => __DIR__ . '/../src/KinopoiskParser/templates',
+]);
+
 $app->get('/', function () use ($app) {
-    return 'Hello world <a href="/movie/71065">movie</a>';
+    return $app['twig']->render('homepage.twig');
 });
 
 $app->get('/hello/{name}', function ($name) use ($app) {
     return 'Hello '.$app->escape($name);
 });
 
-$app->get('/movie/{id}', function ($id) {
+$app->get('/movie/{id}', function ($id) use ($app) {
     $parser = new \KinopoiskParser\Application();
     $data = $parser->parse($id);
     //$message = $request->get('message');
@@ -24,7 +28,7 @@ $app->get('/movie/{id}', function ($id) {
 
     //return new Response('Thank you for your feedback!', 201);
     //return $app->escape($data);
-    return $data;
+    return $app['twig']->render('movie.twig', ['data' => $data]);
 });
 
 $app->run();
