@@ -44,7 +44,7 @@ class Application
      */
     public function parseActors(\QueryPath\DOMQuery $qp) {
         $actors = [];
-        $div = $qp->find('a[name=actor]')->next('.dub');
+        $div = $qp->find('a[name=actor]')->next();
         while ($start = $div->next()) {
             if (!$start->hasClass('dub')) {
                 break;
@@ -57,8 +57,8 @@ class Application
             $actors[$key] = [];
 
             $actors[$key]['photo'] = $div->find('.photo img')->attr('title');
-            $actors[$key]['name'] = $div->find('.name a')->text();
-            if ($role = $div->find('.name .role')) {
+            $actors[$key]['name'] = $div->find('.name > a')->text();
+            if ($role = $div->find('.info > .role')) {
                 $actors[$key]['role'] = $role->text();
             }
         }
