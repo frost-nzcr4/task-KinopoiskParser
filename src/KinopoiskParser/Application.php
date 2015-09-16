@@ -87,7 +87,7 @@ class Application
 
             if (in_array($key, ['режиссер', 'сценарий', 'продюсер', 'оператор', 'композитор', 'художник', 'жанр'], true)) {
                 $value = explode(',', $value);
-                $value = array_map(trim, $value);
+                $value = array_map('trim', $value);
                 $last_value = array_pop($value);
                 if ('...' !== $last_value) {
                     $value[] = $last_value;
