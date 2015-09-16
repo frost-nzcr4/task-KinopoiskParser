@@ -11,7 +11,20 @@
 {% if data.info|length > 0 %}
 <table class="table table-striped table-condensed">
 {% for key, value in data.info %}
-<tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+<tr>
+    <td>{{ key }}</td>
+    <td>
+        {% if value is iterable %}
+            <ul>
+            {% for v in value %}
+                <li>{{ v }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            {{ value }}
+        {% endif %}
+    </td>
+</tr>
 {% endfor %}
 </table>
 {% endif %}

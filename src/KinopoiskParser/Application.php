@@ -1,13 +1,13 @@
 <?php
 /**
- * @version 0.1.0
+ * @version 0.2.0
  */
 
 namespace KinopoiskParser;
 
 class Application
 {
-    const VERSION = '0.1.0';
+    const VERSION = '0.2.0';
 
     public function __construct(array $values = array())
     {
@@ -48,20 +48,17 @@ class Application
     public function parseActors(\QueryPath\DOMQuery $qp) {
         $actors = [];
         $div = $qp->find('a[name=actor]')->next();
-        while ($start = $div->next()) {
-            if (!$start->hasClass('dub')) {
+        while ($div = $div->next()) {
+            if (!$div->hasClass('dub')) {
                 break;
             }
-            $div = $start;
-            if (!$div) {
-                continue;
-            }
-            $key = $div->find('.photo a')->attr('href');
+            $actor = $div->find('.actorInfo');
+            $key = $actor->find('.photo a')->attr('href');
             $actors[$key] = [];
 
-            $actors[$key]['photo'] = $div->find('.photo img')->attr('title');
-            $actors[$key]['name'] = $div->find('.name > a')->text();
-            if ($role = $div->find('.info > .role')) {
+            $actors[$key]['photo'] = $actor->find('.photo img')->attr('title');
+            $actors[$key]['name'] = $actor->find('.name > a')->text();
+            if ($role = $actor->find('.info > .role')) {
                 $actors[$key]['role'] = $role->text();
             }
         }
@@ -81,13 +78,22 @@ class Application
             $key = trim($tr->find('td:nth-child(1)')->text());
             $value = null;
             if (in_array($key, ['жанр', 'бюджет', 'сборы в США', 'сборы в России'], true)) {
-                $value = $tr->find('td:nth-child(2) > :first-child')->text();
+                $value = trim($tr->find('td:nth-child(2) > :first-child')->text());
             } else if (in_array($key, ['сборы в мире'], true)) {
-                $value = $tr->find('td:nth-child(2) > div > :first-child')->text();
+                $value = trim($tr->find('td:nth-child(2) > div > :first-child')->text());
             } else {
-                $value = $tr->find('td:nth-child(2)')->text();
+                $value = trim($tr->find('td:nth-child(2)')->text());
             }
-            $info[$key] = trim($value);
+
+            if (in_array($key, ['режиссер', 'сценарий', 'продюсер', 'оператор', 'композитор', 'художник', 'жанр'], true)) {
+                $value = explode(',', $value);
+                $value = array_map(trim, $value);
+                $last_value = array_pop($value);
+                if ('...' !== $last_value) {
+                    $value[] = $last_value;
+                }
+            }
+            $info[$key] = $value;
         }
         return $info;
     }
