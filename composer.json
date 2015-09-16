@@ -13,6 +13,7 @@
 	],
 	"require" : {
 		"php" : ">=5.3.9",
+		"dompdf/dompdf" : "dev-develop",
 		"querypath/QueryPath" : "~3.0",
 		"silex/silex" : "~1.3",
 		"twig/twig" : "~1.0"

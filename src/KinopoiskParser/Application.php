@@ -1,13 +1,13 @@
 <?php
 /**
- * @version 0.2.0
+ * @version 0.3.0
  */
 
 namespace KinopoiskParser;
 
 class Application
 {
-    const VERSION = '0.2.0';
+    const VERSION = '0.3.0';
 
     public function __construct(array $values = array())
     {
@@ -87,7 +87,7 @@ class Application
 
             if (in_array($key, ['режиссер', 'сценарий', 'продюсер', 'оператор', 'композитор', 'художник', 'жанр'], true)) {
                 $value = explode(',', $value);
-                $value = array_map(trim, $value);
+                $value = array_map('trim', $value);
                 $last_value = array_pop($value);
                 if ('...' !== $last_value) {
                     $value[] = $last_value;

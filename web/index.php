@@ -20,7 +20,13 @@ $app->get('/movie/{id}', function ($id) use ($app) {
     $parser = new \KinopoiskParser\Application();
     $data = $parser->parse($id);
 
-    return $app['twig']->render('movie.twig', ['data' => $data]);
+    return $app['twig']->render('movie.twig', ['data' => $data, 'id' => $id]);
+});
+
+$app->post('/movie/{id}/pdf', function (Request $request, $id) use ($app) {
+    $pdf = new \KinopoiskParser\Pdf($request->get('html_data'));
+
+    return $pdf->getPdf()->stream('www.kinopoisk.ru_film_' . $id . '.pdf');
 });
 
 $app->run();
