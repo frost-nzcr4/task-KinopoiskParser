@@ -1,13 +1,13 @@
 <?php
 /**
- * @version 0.2.0
+ * @version 0.3.0
  */
 
 namespace KinopoiskParser;
 
 class Application
 {
-    const VERSION = '0.2.0';
+    const VERSION = '0.3.0';
 
     public function __construct(array $values = array())
     {
