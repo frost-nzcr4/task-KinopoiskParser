@@ -3,9 +3,13 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <header class="col-xs-12">
-<h1>Информация о фильме</h1>
-<h2>«{{ data.header }}»</h2>
+        <div class="col-xs-12">
+<form method="POST" action="/movie/{{ id }}/pdf" class="form-download-as-pdf">
+<input type="hidden" name="html_data" value="">
+<button class="btn btn-primary download-as-pdf" type="submit">Скачать в PDF</button>
+</form>
+
+<h1>«{{ data.header }}»</h1>
 
 <h3>Информация</h3>
 {% if data.info|length > 0 %}
@@ -40,4 +44,25 @@
 		</div>
 	</div>
 </div>
+{% endblock %}
+{% block bottom_scripts %}
+{{ parent() }}
+<script>
+(function ($) {
+    "use strict";
+
+    $(".form-download-as-pdf").submit(function (event) {
+        var html = $("html").clone(),
+            style = $("<style>\n" +
+            "* { font-family: DejaVu Sans, sans-serif; }\n" +
+            ".form-download-as-pdf { display: none; }\n" +
+            "</style>");
+        html.find(".download-as-pdf").remove();
+        html.find("head").append(style);
+        //Issue with border-box in Bootstrap. @see https://github.com/dompdf/dompdf/issues/631
+        html.find("link[rel=stylesheet]").remove();
+        this.html_data.value = html.html();
+    });
+})(jQuery);
+</script>
 {% endblock %}
